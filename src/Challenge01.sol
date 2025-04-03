@@ -9,7 +9,7 @@
 
 pragma solidity ^0.8.20;
 
-contract Challlenge01 {
+contract Challenge01 {
 
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed owner, address indexed spender, uint256 value);
@@ -72,7 +72,7 @@ contract Challlenge01 {
 
     function transferFrom(address from, address to, uint256 value) public virtual returns (bool) {
         address spender = msg.sender;
-        _spendAllowance(from, spender, value);
+        _spendAllowance(from, spender, value); //@audit should this happen after the transfer? - nah allowance is not checked in _transfer so this is correct, decrement allowance before transfer
         _transfer(from, to, value);
         return true;
     }
@@ -81,7 +81,7 @@ contract Challlenge01 {
         if (from == address(0)) revert InvalidSender(from);
         if (to == address(0)) revert InvalidReceiver(to);
 
-        uint256 fromBalance = _balances[from];
+        uint256 fromBalance = _balances[from]; //@audit-issue from balance is never decremented
         if (fromBalance < value) revert InsufficientBalance(from, fromBalance, value);
 
         _balances[to] += value;
@@ -101,11 +101,17 @@ contract Challlenge01 {
         if (currentAllowance != type(uint256).max) {
             if (currentAllowance < value) revert InsufficientAllowance(spender, currentAllowance, value);
             unchecked {
-                _approve(owner, spender, currentAllowance - value);
+                _approve(owner, spender, currentAllowance - value); 
             }
         }
     }
 
+    //@note function for testing purposes --- testing transfer never decrements `from` balance
+    function mint(address account, uint256 value) public {
+        _mint(account, value);
+    }
+
+    //@audit-issue _mint not implemented or virtual so can never be used 
     function _mint(address account, uint256 value) internal {
         if (account == address(0)) revert InvalidReceiver(account);
         _totalSupply += value;
@@ -113,6 +119,7 @@ contract Challlenge01 {
         emit Transfer(address(0), account, value);
     }
 
+    //@audit-issue _burn not implemented or virtual so can never be used
     function _burn(address account, uint256 value) internal {
         if (account == address(0)) revert InvalidSender(account);
 

@@ -82,7 +82,7 @@ contract Challenge04 {
         _approve(msg.sender, spender, value);
         return true;
     }
-
+    //@audit-issue transferFrom can happen when the contract is paused.
     function transferFrom(address from, address to, uint256 value) public returns (bool) {
         _spendAllowance(from, msg.sender, value);
         _transfer(from, to, value);

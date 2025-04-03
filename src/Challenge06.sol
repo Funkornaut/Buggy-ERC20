@@ -73,7 +73,7 @@ contract Challenge06 {
         _approve(msg.sender, spender, value);
         return true;
     }
-
+    //@audit-issue from address could be on the blacklist and tokens can be transferred out of the address
     function transferFrom(address from, address to, uint256 value) public returns (bool) {
         require(!blacklist[msg.sender] && !blacklist[to], "Sender or receiver blacklisted");
         _spendAllowance(from, msg.sender, value);

@@ -35,7 +35,7 @@ contract Challenge03 {
         symbol = "BUG3";
         _mint(msg.sender, 1000000 * 10 ** 18);
     }
-
+    //@audit-issue anyone can burn anyone elses tokens
     function burn(address account, uint256 value) public {
         require(account != address(0), "Invalid burner");
         uint256 accountBalance = _balances[account];

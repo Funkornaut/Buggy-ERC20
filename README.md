@@ -1,3 +1,7 @@
+# ERC-20 Spot the Bug Solutions
+
+Solutions to Rare Skill's Buggy ERC20 Challenges.
+
 # ERC-20 Spot the Bug
 
 Buggy ERC-20 is a collection of 20 ERC-20 implementations with a bug injected in them.

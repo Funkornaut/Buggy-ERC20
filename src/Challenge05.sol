@@ -59,7 +59,7 @@ contract Challenge05 {
 
     function transferFrom(address from, address to, uint256 value) public returns (bool) {
         _spendAllowance(from, msg.sender, value);
-        _transfer(to, from, value);
+        _transfer(to, from, value); //@audit-issue from and to are swapped
         return true;
     }   
     

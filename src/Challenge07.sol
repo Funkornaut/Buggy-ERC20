@@ -89,7 +89,7 @@ contract Challenge07 {
         _transfer(from, to, value);
         return true;
     }
-
+    //@audit-issue unprotected mint function
     function mint(address to, uint256 value) public {
         _mint(to, value);
     }

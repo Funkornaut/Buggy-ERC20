@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: CC-BY-NC-SA-4.0
-pragma solidity >=0.8.0;
+pragma solidity >=0.8.0; //@audit over/underflow
 
 /// ██████╗ ██╗  ██╗ █████╗ ██╗     ██╗     ███████╗███╗   ██╗ ██████╗ ███████╗
 /// ██╔════╝██║  ██║██╔══██╗██║     ██║     ██╔════╝████╗  ██║██╔════╝ ██╔════╝
@@ -40,12 +40,12 @@ contract Challenge02 {
     }
 
     function approve(address owner, address spender, uint256 amount) public {
-        allowance[owner][spender] = amount;
+        allowance[owner][spender] = amount; //@audit-issue no check for owner being msg.sender so anyone can approve any address.
         emit Approval(owner, spender, amount);
     }
 
     function transfer(address to, uint256 amount) public virtual returns (bool) {
-        balanceOf[msg.sender] -= amount;
+        balanceOf[msg.sender] -= amount; //@audit-issue no check for the balance before transferring. Will underflow if the balance is less than the amount.
 
         unchecked {
             balanceOf[to] += amount;
@@ -59,9 +59,9 @@ contract Challenge02 {
     function transferFrom(address from, address to, uint256 amount) public virtual returns (bool) {
         uint256 allowed = allowance[from][msg.sender];
 
-        if (allowed != type(uint256).max) allowance[from][msg.sender] = allowed - amount;
+        if (allowed != type(uint256).max) allowance[from][msg.sender] = allowed - amount; //@audit-issue if amount is greater than allowed, it will underflow.
 
-        balanceOf[from] -= amount;
+        balanceOf[from] -= amount; //@audit-issue no check for the balance before transferring. Will underflow if the balance is less than the amount.
 
 
         unchecked {
@@ -85,7 +85,7 @@ contract Challenge02 {
     }
 
     function _burn(address from, uint256 amount) internal virtual {
-        balanceOf[from] -= amount;
+        balanceOf[from] -= amount; //@audit-issue balance can underflow. No check for the balance before burning.
 
         unchecked {
             totalSupply -= amount;
