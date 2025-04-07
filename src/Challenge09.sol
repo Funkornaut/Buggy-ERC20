@@ -56,7 +56,7 @@ contract Challenge09 {
         emit Approval(msg.sender, spender, amount);
         return true;
     }
-
+    //@audit-issue: no balance of from check, in unchecked block will underflow
     function transfer(address to, uint256 amount) public returns (bool) {
         unchecked {
             _balances[msg.sender] -= amount;

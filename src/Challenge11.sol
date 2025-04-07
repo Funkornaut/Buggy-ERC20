@@ -74,13 +74,14 @@ contract Challenge11 {
 
     function transferFrom(address from, address to, uint256 value) public returns (bool) {
         _transfer(from, to, value);
-        uint256 currentAllowance = _allowances[from][msg.sender];
+        uint256 currentAllowance = _allowances[from][msg.sender]; //@audit not CEI
         require(currentAllowance >= value, "Insufficient allowance");
-        _allowances[msg.sender][from] = currentAllowance - value;
+        _allowances[msg.sender][from] = currentAllowance - value; //@audit-issue: wrong mapping updated
         return true;
     }
 
     function increaseAllowance(address spender, uint256 addedValue) public returns (bool) {
+        //@audit-issue:  seems odd to call allowance and add to it during the _approve
         _approve(msg.sender, spender, allowance(msg.sender, spender) + addedValue);
         return true;
     }
@@ -125,7 +126,7 @@ contract Challenge11 {
         }
         emit Transfer(address(0), account, value);
     }
-
+    //@audit-issue: not used
     function _burn(address account, uint256 value) internal {
         require(account != address(0), "ERC20: burn from the zero address");
 

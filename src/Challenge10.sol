@@ -40,7 +40,7 @@ contract Challenge10 {
         emit OwnershipTransferred(address(0), msg.sender);
         _mint(msg.sender, 1000000 * 10 ** decimals());
     }
-
+    //@audit-issue: modifier sets the owner to the msg.sender.
     modifier onlyOwner() {
         msg.sender == owner;
         _;

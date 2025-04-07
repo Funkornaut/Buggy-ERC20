@@ -81,7 +81,7 @@ contract Challenge08 {
         _transfer(from, to, value);
         return true;
     }
-
+    //@audit-issue: burn does not decrease total supply
     function burn(uint256 value) public {
         _balances[msg.sender] -= value;
         emit Transfer(msg.sender, address(0), value);

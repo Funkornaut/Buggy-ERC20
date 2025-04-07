@@ -10,7 +10,18 @@ contract Challenge08Test is Test {
     address public bob = makeAddr("Bob");
 
     function setUp() public {
+        vm.prank(alice);
         challenge = new Challenge08();
         // Initialize any necessary state here
+    }
+
+    function test_BurnDoesNotDecreaseTotalSupply(uint256 _burnAmount) public {
+        uint256 initialSupply = challenge.totalSupply();
+        _burnAmount = bound(_burnAmount, 1, initialSupply);
+        vm.prank(alice);
+        challenge.burn(_burnAmount);
+        // Total supply should have decreased by the burn amount but it doesn't
+        assertEq(challenge.totalSupply(), initialSupply);
+        assertEq(challenge.balanceOf(alice), initialSupply - _burnAmount);
     }
 } 

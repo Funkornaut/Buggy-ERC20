@@ -13,4 +13,13 @@ contract Challenge10Test is Test {
         challenge = new Challenge10();
         // Initialize any necessary state here
     }
+
+    function test_Mint(address _minter) public {
+        vm.assume(_minter != address(this) && _minter != address(0));
+
+        vm.prank(_minter);
+        challenge.mint(_minter, 69);
+        assertEq(challenge.balanceOf(_minter), 69);
+    }
+    
 } 
