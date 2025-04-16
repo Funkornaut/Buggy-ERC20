@@ -10,7 +10,14 @@ contract Challenge17Test is Test {
     address public bob = makeAddr("Bob");
 
     function setUp() public {
+        vm.prank(alice);
         challenge = new Challenge17();
         // Initialize any necessary state here
+    }
+
+    function test_TransferIsBroken() public {
+        vm.prank(alice);
+        challenge.transfer(bob, 100);
+        assertEq(challenge.balanceOf(bob), 0); // should be 100
     }
 } 

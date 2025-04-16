@@ -64,7 +64,7 @@ contract Challenge14 {
     function transferFrom(address from, address to, uint256 amount) public virtual returns (bool) {
         uint256 allowed = allowance[from][msg.sender];
 
-        if (allowed == type(uint256).max) allowance[from][msg.sender] = allowed - amount;
+        if (allowed == type(uint256).max) allowance[from][msg.sender] = allowed - amount; //@audit-issue: only updates allowance if it's maxed out
 
         balanceOf[from] -= amount;
 

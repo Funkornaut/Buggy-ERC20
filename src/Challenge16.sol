@@ -66,7 +66,7 @@ contract Challenge16 {
     function allowance(address owner, address spender) public view returns (uint256) {
         return _allowances[owner][spender];
     }
-
+    //@audit-issue: nothing is actually approved
     function approve(address spender, uint256 value) public returns (bool) {
         emit Approval(msg.sender, spender, value);
         return true;

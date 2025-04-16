@@ -41,7 +41,7 @@ contract Challenge13 {
     }
 
     function approve(address spender, uint256 amount) public virtual returns (bool) {
-        allowance[spender][msg.sender] = amount;
+        allowance[spender][msg.sender] = amount; //is this correct?
 
         emit Approval(msg.sender, spender, amount);
 
@@ -49,7 +49,7 @@ contract Challenge13 {
     }
 
     function transfer(address to, uint256 amount) public virtual returns (bool) {
-        balanceOf[msg.sender] -= amount;
+        balanceOf[msg.sender] -= amount; //@audit-issue: no check for balance
 
         unchecked {
             balanceOf[to] += amount;

@@ -97,7 +97,7 @@ contract Challenge18 {
         require(to != address(0), "ERC20: transfer to the zero address");
 
         uint256 fromBalance = _balances[from];
-        require(fromBalance >= value, "ERC20: transfer amount exceeds balance");
+        require(fromBalance >= value, "ERC20: transfer amount exceeds balance"); 
         unchecked {
             _balances[from] = fromBalance - value;
             _balances[to] += value;
@@ -121,7 +121,7 @@ contract Challenge18 {
             _allowances[tokenOwner][spender] = currentAllowance - value;
         }
     }
-
+    //@audit-issue: not updating the total supply
     function _mint(address account, uint256 value) internal {
         require(account != address(0), "ERC20: mint to the zero address");
 
@@ -131,6 +131,7 @@ contract Challenge18 {
         emit Transfer(address(0), account, value);
     }
 
+    //@audit-issue: because _mint does not update the total supply, _burn will underflow the total supply
     function _burn(address account, uint256 value) internal {
         require(account != address(0), "ERC20: burn from the zero address");
 

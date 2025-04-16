@@ -76,7 +76,7 @@ contract Challenge15 {
 
         return true;
     }
-
+    //@audit-issue: mint to noone
     function _mint(address to, uint256 amount) internal virtual {
         totalSupply += amount;
 

@@ -10,7 +10,14 @@ contract Challenge16Test is Test {
     address public bob = makeAddr("Bob");
 
     function setUp() public {
+        vm.prank(alice);
         challenge = new Challenge16();
         // Initialize any necessary state here
+    }
+
+    function test_Approve() public {
+        vm.prank(alice);
+        challenge.approve(bob, 100);
+        assertEq(challenge.allowance(alice, bob), 0); 
     }
 } 

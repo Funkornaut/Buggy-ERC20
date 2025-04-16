@@ -56,13 +56,13 @@ contract Challenge12 {
 
         return true;
     }
-
+    //@audit-issue: totalSupply is not updated
     function gift(address to, uint256 amount) public onlyOwner {
         balanceOf[to] += amount;
 
         emit Transfer(address(0), to, amount);
     }
-
+    //@audit-issue: balance of msg.sender is not checked before transfer, will underflow fail if transfering more than balance
     function transfer(address to, uint256 amount) public virtual returns (bool) {
         balanceOf[msg.sender] -= amount;
 
@@ -74,7 +74,7 @@ contract Challenge12 {
 
         return true;
     }
-
+    //@audit-issue: balance not checked of from address
     function transferFrom(address from, address to, uint256 amount) public virtual returns (bool) {
         uint256 allowed = allowance[from][msg.sender]; 
 
@@ -97,7 +97,7 @@ contract Challenge12 {
 
         emit Transfer(address(0), to, amount);
     }
-
+    //@audit-issue: balance not checked
     function _burn(address from, uint256 amount) internal virtual {
         balanceOf[from] -= amount;
 
